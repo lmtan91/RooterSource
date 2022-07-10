@@ -16,7 +16,7 @@ MAX_MODEMS=2
 MODCNT=$MAX_MODEMS
 
 log() {
-	logger -t "ROOter Initialize" "$@"
+	logger -t "BTS-LTER Initialize" "$@"
 }
 
 do_zone() {
@@ -45,12 +45,12 @@ do_zone() {
 firstboot() {
 	HO=$(uci get system.@system[-1].hostname)
 	if [ $HO = "OpenWrt" ]; then
-		uci set system.@system[-1].hostname="ROOter"
-		echo "ROOter" > /proc/sys/kernel/hostname
+		uci set system.@system[-1].hostname="BTS-LTER"
+		echo "BTS-LTER" > /proc/sys/kernel/hostname
 	fi
 	if [ $HO = "LEDE" ]; then
-		uci set system.@system[-1].hostname="ROOter"
-		echo "ROOter" > /proc/sys/kernel/hostname
+		uci set system.@system[-1].hostname="BTS-LTER"
+		echo "BTS-LTER" > /proc/sys/kernel/hostname
 	fi
 	uci set system.@system[-1].cronloglevel="9"
 	uci commit system
@@ -61,7 +61,7 @@ firstboot() {
 		uci commit profile
 	fi
 
-	log "ROOter First Boot finalized"
+	log "BTS-LTER First Boot finalized"
 
 	config_load firewall
 	config_foreach do_zone zone
@@ -253,7 +253,7 @@ lua $ROOTER/gpiomodel.lua
 
 HO=$(uci get system.@system[-1].hostname)
 if [ $HO = "OpenWrt" ]; then
-	uci set system.@system[-1].hostname="ROOter"
+	uci set system.@system[-1].hostname="BTS-LTER"
 	uci commit system
 fi
 
