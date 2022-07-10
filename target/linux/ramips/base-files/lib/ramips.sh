@@ -685,6 +685,9 @@ ramips_board_detect() {
 	*"ZBT-WE826 (32M)")
 		name="zbt-we826-32M"
 		;;
+	*"BTS-LTER826")
+		name="bts-lter826"
+		;;
 	*"ZBT-WG2626")
 		name="zbt-wg2626"
 		;;

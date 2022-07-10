@@ -413,7 +413,7 @@ header > .fill > .container > .brand {
 	line-height:60px;
 	color: white;
 	cursor: default;
-	background: #61d8ff;
+	background: #cc0a2f;
 	display:block;
 	width:17rem;
 	padding-right: 10px;
@@ -698,7 +698,7 @@ color: #FFFAFA!important;
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active {
-    background-color: #337ab7;
+    background-color: #cc0a2f;
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li > a {
@@ -1773,7 +1773,7 @@ body.modal-overlay-active #modal_overlay {
 }
 
 .cbi-progressbar > div {
-	background: #3498db;
+	background: #cc0a2f;
 	height: 100%;
 	transition: width .25s ease-in;
 	width: 0%;
