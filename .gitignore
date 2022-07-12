@@ -1,0 +1,15 @@
+#directory
+tmp/
+staging_dir/
+bin/
+build_dir/
+dl/
+files/*
+images/
+#file
+key-build
+key-build.pub
+key-build.ucert
+key-build.ucert.revoke
+.config
+.config.old
