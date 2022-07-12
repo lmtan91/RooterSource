@@ -12588,7 +12588,7 @@ Build firmware images for ALFA Network AC1200RM
 
 Target-Profile: DEVICE_alfa-network_r36m-e4g
 Target-Profile-Name: ALFA Network R36M-E4G
-Target-Profile-Packages: kmod-i2c-ralink kmod-usb2 kmod-usb-ohci uboot-envtools uqmi 
+Target-Profile-Packages: kmod-i2c-ralink kmod-usb2 kmod-usb-ohci uboot-envtools 
 Target-Profile-hasImageMetadata: 1
 Target-Profile-SupportedDevices: alfa-network,r36m-e4g
 
@@ -12598,7 +12598,7 @@ Build firmware images for ALFA Network R36M-E4G
 
 Target-Profile: DEVICE_alfa-network_tube-e4g
 Target-Profile-Name: ALFA Network Tube-E4G
-Target-Profile-Packages: kmod-usb2 kmod-usb-ohci uboot-envtools uqmi -iwinfo -kmod-rt2800-soc -wpad-basic 
+Target-Profile-Packages: kmod-usb2 kmod-usb-ohci uboot-envtools -iwinfo -kmod-rt2800-soc -wpad-basic 
 Target-Profile-hasImageMetadata: 1
 Target-Profile-SupportedDevices: alfa-network,tube-e4g
 
@@ -12914,6 +12914,16 @@ Target-Profile-SupportedDevices: iodata,wn-ac733gr3
 
 Target-Profile-Description:
 Build firmware images for I-O DATA WN-AC733GR3
+@@
+
+Target-Profile: DEVICE_irz_mt00
+Target-Profile-Name: irz_mt00 board
+Target-Profile-Packages:  
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: irz_mt00
+
+Target-Profile-Description:
+Build firmware images for irz_mt00 board
 @@
 
 Target-Profile: DEVICE_kimax_u35wf
@@ -13316,6 +13326,16 @@ Target-Profile-Description:
 Build firmware images for Nexx WT3020 (8MB)
 @@
 
+Target-Profile: DEVICE_wt3020-16M
+Target-Profile-Name: Nexx WT3020 (16MB)
+Target-Profile-Packages: kmod-usb2 kmod-usb-ohci 
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: wt3020-16M wt3020
+
+Target-Profile-Description:
+Build firmware images for Nexx WT3020 (16MB)
+@@
+
 Target-Profile: DEVICE_y1
 Target-Profile-Name: Lenovo Y1
 Target-Profile-Packages: kmod-mt76x2 kmod-usb2 kmod-usb-ohci 
@@ -13406,6 +13426,16 @@ Target-Profile-Description:
 Build firmware images for Zbtlink ZBT-WE826 (16M)
 @@
 
+Target-Profile: DEVICE_bts-lter826
+Target-Profile-Name: BTS-LTER826
+Target-Profile-Packages: kmod-mt76x2 kmod-usb2 kmod-usb-ohci kmod-sdhci-mt7620 
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: bts-lter826 bts-lter826
+
+Target-Profile-Description:
+Build firmware images for BTS-LTER826
+@@
+
 Target-Profile: DEVICE_zbt-we826-32M
 Target-Profile-Name: Zbtlink ZBT-WE826 (32M)
 Target-Profile-Packages: kmod-mt76x2 kmod-usb2 kmod-usb-ohci kmod-sdhci-mt7620 
@@ -13434,6 +13464,16 @@ Target-Profile-SupportedDevices: zbt-wr8305rt
 
 Target-Profile-Description:
 Build firmware images for Zbtlink ZBT-WR8305RT
+@@
+
+Target-Profile: DEVICE_zbt-we2802d
+Target-Profile-Name: Zbtlink ZBT-WE2802D
+Target-Profile-Packages:  
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: zbt-we2802d
+
+Target-Profile-Description:
+Build firmware images for Zbtlink ZBT-WE2802D
 @@
 
 Target-Profile: DEVICE_zte-q7
@@ -13610,6 +13650,16 @@ Target-Profile-Description:
 Build firmware images for GnuBee Personal Cloud Two
 @@
 
+Target-Profile: DEVICE_hlk-7621a
+Target-Profile-Name: HiLink HLK-7621A
+Target-Profile-Packages: kmod-usb3 kmod-usb-ledtrig-usbport 
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: hlk-7621a
+
+Target-Profile-Description:
+Build firmware images for HiLink HLK-7621A
+@@
+
 Target-Profile: DEVICE_hc5962
 Target-Profile-Name: HiWiFi HC5962
 Target-Profile-Packages: kmod-mt7603 kmod-mt76x2 kmod-usb3 wpad-basic iwinfo
@@ -13668,6 +13718,26 @@ Target-Profile-SupportedDevices: xiaomi,mir3g R3G mir3g
 
 Target-Profile-Description:
 Build firmware images for Xiaomi Mi Router 3G
+@@
+
+Target-Profile: DEVICE_beeline_smartbox-turbo-plus
+Target-Profile-Name: Beeline SmartBox TURBO+
+Target-Profile-Packages: kmod-mt7603 kmod-mt7615e kmod-usb3 kmod-usb-ledtrig-usbport uboot-envtools wpad-basic iwinfo
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: beeline,smartbox-turbo-plus
+
+Target-Profile-Description:
+Build firmware images for Beeline SmartBox TURBO+
+@@
+
+Target-Profile: DEVICE_beeline_smartbox-pro
+Target-Profile-Name: Beeline SmartBox PRO
+Target-Profile-Packages: kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport uboot-envtools wpad-basic iwinfo
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: beeline,smartbox-pro
+
+Target-Profile-Description:
+Build firmware images for Beeline SmartBox PRO
 @@
 
 Target-Profile: DEVICE_mt7621
@@ -13752,7 +13822,7 @@ Build firmware images for MikroTik RouterBOARD RB750Gr3
 
 Target-Profile: DEVICE_mikrotik_rbm33g
 Target-Profile-Name: MikroTik RouterBOARD M33G
-Target-Profile-Packages: kmod-usb3 
+Target-Profile-Packages: kmod-usb3 kmod-usb2 kmod-usb-ohci kmod-sdhci-mt7620 
 Target-Profile-hasImageMetadata: 1
 Target-Profile-SupportedDevices: mikrotik,rbm33g
 
@@ -13762,7 +13832,7 @@ Build firmware images for MikroTik RouterBOARD M33G
 
 Target-Profile: DEVICE_mikrotik_rbm11g
 Target-Profile-Name: MikroTik RouterBOARD M11G
-Target-Profile-Packages: kmod-usb3 
+Target-Profile-Packages: kmod-usb3 kmod-usb2 kmod-usb-ohci kmod-sdhci-mt7620 
 Target-Profile-hasImageMetadata: 1
 Target-Profile-SupportedDevices: mikrotik,rbm11g
 
@@ -13858,6 +13928,16 @@ Target-Profile-SupportedDevices: ubnt-erx-sfp ubiquiti,edgerouterx ubiquiti,edge
 
 Target-Profile-Description:
 Build firmware images for Ubiquiti EdgeRouter X-SFP
+@@
+
+Target-Profile: DEVICE_mofi5500
+Target-Profile-Name: Mofi5500
+Target-Profile-Packages: kmod-ata-core kmod-ata-ahci kmod-sdhci-mt7620 kmod-usb3 kmod-mt7603 kmod-mt7615e  
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: mofi5500 mofi5500
+
+Target-Profile-Description:
+Build firmware images for Mofi5500
 @@
 
 Target-Profile: DEVICE_unielec_u7621-06-256m-16m
@@ -13990,6 +14070,16 @@ Target-Profile-Description:
 Build firmware images for ZBT WE1326
 @@
 
+Target-Profile: DEVICE_zbt-we1326v5
+Target-Profile-Name: ZBT WE1326v5
+Target-Profile-Packages: kmod-mt7603 kmod-mt76x2 kmod-usb3 kmod-sdhci-mt7620 wpad-basic iwinfo
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: zbt-we1326v5
+
+Target-Profile-Description:
+Build firmware images for ZBT WE1326v5
+@@
+
 Target-Profile: DEVICE_zbtlink_zbt-we3526
 Target-Profile-Name: ZBT WE3526
 Target-Profile-Packages: kmod-sdhci-mt7620 kmod-mt7603 kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic iwinfo
@@ -14020,6 +14110,36 @@ Target-Profile-Description:
 Build firmware images for ZBT WG3526 (16MB flash)
 @@
 
+Target-Profile: DEVICE_zbt-wg209-16M
+Target-Profile-Name: ZBT WG209 (16MB flash)
+Target-Profile-Packages: kmod-ata-core kmod-ata-ahci kmod-sdhci-mt7620 kmod-mt7603 kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic iwinfo
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: zbt-wg209-16M zbt-wg209
+
+Target-Profile-Description:
+Build firmware images for ZBT WG209 (16MB flash)
+@@
+
+Target-Profile: DEVICE_zbt-wg1602-16M
+Target-Profile-Name: ZBT WG1602 (16MB flash)
+Target-Profile-Packages: kmod-ata-core kmod-ata-ahci kmod-sdhci-mt7620 kmod-mt7603 kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic iwinfo
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: zbt-wg1602-16M zbt-wg1602
+
+Target-Profile-Description:
+Build firmware images for ZBT WG1602 (16MB flash)
+@@
+
+Target-Profile: DEVICE_huasifei-ws1208v2
+Target-Profile-Name: Huasifei-WS1208V2
+Target-Profile-Packages: kmod-ata-core kmod-ata-ahci kmod-sdhci-mt7620 kmod-mt7603 kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic iwinfo
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: huasifei-ws1208v2 huasifei-ws1208v2
+
+Target-Profile-Description:
+Build firmware images for Huasifei-WS1208V2
+@@
+
 Target-Profile: DEVICE_zbt-wg3526-32M
 Target-Profile-Name: ZBT WG3526 (32MB flash)
 Target-Profile-Packages: kmod-ata-core kmod-ata-ahci kmod-sdhci-mt7620 kmod-mt7603 kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic iwinfo
@@ -14028,6 +14148,16 @@ Target-Profile-SupportedDevices: zbt-wg3526-32M ac1200pro
 
 Target-Profile-Description:
 Build firmware images for ZBT WG3526 (32MB flash)
+@@
+
+Target-Profile: DEVICE_dualq-h721-256m-16m
+Target-Profile-Name: DualQ H721 (256M RAM/16M flash)
+Target-Profile-Packages: kmod-ata-core kmod-ata-ahci kmod-sdhci-mt7620 kmod-usb3 
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: dualq-h721-256m-16m h721-256M-16M
+
+Target-Profile-Description:
+Build firmware images for DualQ H721 (256M RAM/16M flash)
 @@
 
 Target: ramips/mt76x8
@@ -14502,6 +14632,16 @@ Target-Profile-SupportedDevices: zbtlink,zbt-we1226
 
 Target-Profile-Description:
 Build firmware images for ZBTlink ZBT-WE1226
+@@
+
+Target-Profile: DEVICE_zbt-we2802d
+Target-Profile-Name: Zbtlink ZBT-WE2802D
+Target-Profile-Packages:  
+Target-Profile-hasImageMetadata: 1
+Target-Profile-SupportedDevices: zbt-we2802d
+
+Target-Profile-Description:
+Build firmware images for Zbtlink ZBT-WE2802D
 @@
 
 Target-Profile: DEVICE_zyxel_keenetic-extra-ii
