@@ -14,7 +14,7 @@
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 <script type="text/javascript">//<![CDATA[
 	
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "modem", "get_scanlog")%>', null,
+	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "modem", "lte_scancell")%>', null,
 		function(x, rv)
 		{
 			const data = rv.log;
