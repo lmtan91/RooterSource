@@ -3,7 +3,7 @@
 ROOTER=/usr/lib/rooter
 
 log() {
-	logger -t "Quectel EC20 Scan Command" "$@"
+	logger -t "Quectel Scancell" "$@"
 }
 
 fibdecode() {
@@ -265,10 +265,10 @@ if [ ! -z $ERR ]; then
 	log "$OX"
 fi
 log "$OX"
-echo "$OX" > /tmp/scanx
-rm -f /tmp/scan
-echo "Cell Scanner Start ..." > /tmp/scan
-echo " " >> /tmp/scan
+echo "$OX" > /tmp/quectelScanx
+rm -f /tmp/quectelScan
+echo "Cell Scanner Start ..." > /tmp/quectelScan
+echo " " >> /tmp/quectelScan
 flg=0
 while IFS= read -r line
 do
@@ -282,9 +282,9 @@ do
 			RSSI=$(echo $qm | cut -d, -f9)
 			BAND=$(/usr/bin/chan2band.sh $BND)
 			if [ "$INT" = "intra" ]; then
-				echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI (current)" >> /tmp/scan
+				echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI (current)" >> /tmp/quectelScan
 			else
-				echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI" >> /tmp/scan
+				echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI" >> /tmp/quectelScan
 			fi
 			flg=1
 		fi
@@ -298,7 +298,7 @@ do
 			PCI=$(echo $qm | cut -d, -f10)
 			BAND=$(/usr/bin/chan2band.sh $BND)
 			RSSI=$(echo $qm | cut -d, -f13)
-			echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI (current)" >> /tmp/scan
+			echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI (current)" >> /tmp/quectelScan
 			flg=1
 		else
 			qm=$(echo $line" " | grep "InterFreq:" | tr -d '"' | tr " " ",")
@@ -325,7 +325,7 @@ do
 					PCI=$(echo $qm | cut -d, -f10)
 					BAND=$(/usr/bin/chan2band.sh $BND)
 					RSSI=$(echo $qm | cut -d, -f8)
-					echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI" >> /tmp/scan
+					echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI" >> /tmp/quectelScan
 					flg=1
 				done
 				break
@@ -336,14 +336,14 @@ do
 	
 	;;
 	esac
-done < /tmp/scanx
+done < /tmp/quectelScanx
 
-rm -f /tmp/scanx
+rm -f /tmp/quectelScanx
 if [ $flg -eq 0 ]; then
-	echo "No Neighbouring cells were found" >> /tmp/scan
+	echo "No Neighbouring cells were found" >> /tmp/quectelScan
 fi
-echo " " >> /tmp/scan
-echo "Done" >> /tmp/scan
+echo " " >> /tmp/quectelScan
+echo "Done" >> /tmp/quectelScan
 
 case $uVid in
 	"2c7c" )
