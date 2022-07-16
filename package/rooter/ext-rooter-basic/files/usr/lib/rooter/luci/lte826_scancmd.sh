@@ -249,6 +249,7 @@ case $uVid in
 	;;
 esac
 
+# run AT command
 export TIMEOUT="10"
 OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
 OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
@@ -270,22 +271,91 @@ rm -f /tmp/quectelScan
 echo "Cell Scanner Start ..." > /tmp/quectelScan
 echo " " >> /tmp/quectelScan
 flg=0
+
+#data print to UI
+TYPE="-"
+OPERATOR="-"
+COUNTRY="-"
+PROTOCOL="-"
+SCHEME="-"
+MCC="-"
+MNC="-"
+CID="-"
+PCID="-"
+EARFCN="-"
+FREQ_BAND_IND="-"
+UL_BW="-"
+DL_BW="-"
+TAC="-"
+RSRP="-"
+RSRQ="-"
+RSSI="-"
+SINR="-"
+SRXLEV="-"
+CELL_RSP="-"
+SNIS="-"
+SIS="-"
+TXL="-"
+TXH="-"
+
+# parse data
 while IFS= read -r line
 do
 	case $uVid in
 	"2c7c" )
 		qm=$(echo $line" " | grep "+QENG:" | tr -d '"' | tr " " ",")
 		if [ "$qm" ]; then
-			INT=$(echo $qm | cut -d, -f3)
-			BND=$(echo $qm | cut -d, -f5)
-			PCI=$(echo $qm | cut -d, -f6)
-			RSSI=$(echo $qm | cut -d, -f9)
-			BAND=$(/usr/bin/chan2band.sh $BND)
-			if [ "$INT" = "intra" ]; then
-				echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI (current)" >> /tmp/quectelScan
-			else
-				echo "Band : $BAND    Signal : $RSSI (dBm) EARFCN : $BND  PCI : $PCI" >> /tmp/quectelScan
+			TYPECELL=$(echo $qm | cut -d, -f2)
+			if [ "$TYPECELL" = "servingcell" ]; then
+				# serving cell
+				TYPE="MC"
+				# STATE=$(echo $qm | cut -d, -f3)
+				PROTOCOL=$(echo $qm | cut -d, -f4)
+				SCHEME=$(echo $qm | cut -d, -f5)
+				MCC=$(echo $qm | cut -d, -f6)
+				MNC=$(echo $qm | cut -d, -f7)
+				CID=$(echo $qm | cut -d, -f8)
+				PCID=$(echo $qm | cut -d, -f9)
+				EARFCN=$(echo $qm | cut -d, -f10)
+				FREQ_BAND_IND=$(echo $qm | cut -d, -f11)
+				UL_BW=$(echo $qm | cut -d, -f12)
+				DL_BW=$(echo $qm | cut -d, -f13)
+				TAC=$(echo $qm | cut -d, -f14)
+				RSRP=$(echo $qm | cut -d, -f15)
+				RSRQ=$(echo $qm | cut -d, -f16)
+				RSSI=$(echo $qm | cut -d, -f17)
+				SINR=$(echo $qm | cut -d, -f18)
+				SRXLEV=$(echo $qm | cut -d, -f19)
+			else 
+				# neighbour cell
+				TYPE=$(echo $qm | cut -d, -f3)
+				PROTOCOL=$(echo $qm | cut -d, -f4)
+				EARFCN=$(echo $qm | cut -d, -f5)
+				PCID=$(echo $qm | cut -d, -f6)
+				RSRQ=$(echo $qm | cut -d, -f7)
+				RSRP=$(echo $qm | cut -d, -f8)
+				RSSI=$(echo $qm | cut -d, -f9)
+				SINR=$(echo $qm | cut -d, -f10)
+				SRXLEV=$(echo $qm | cut -d, -f11)  
+				CELL_RSP=$(echo $qm | cut -d, -f12)
+				# re-init unvalid data
+				FREQ_BAND_IND="-"
+				UL_BW="-"
+				DL_BW="-"
+				TAC="-"
+				# Parse specific data for intra and iner
+				if [ "$TYPE" = "inter" ]; then
+					TXL=$(echo $qm | cut -d, -f13)
+					TXH=$(echo $qm | cut -d, -f14)
+				else
+					SNIS=$(echo $qm | cut -d, -f13)
+					TSL=$(echo $qm | cut -d, -f14)
+					SIS=$(echo $qm | cut -d, -f15)
+				fi
 			fi
+			# update data to file
+			echo "$TYPE $OPERATOR $COUNTRY $PROTOCOL $SCHEME $MCC $MNC $CID $PCID $EARFCN $FREQ_BAND_IND $UL_BW $DL_BW $TAC $RSRP $RSRQ $RSSI $SINR $SRXLEV $CELL_RSP $SNIS $SIS $TXL $TXH" >> /tmp/quectelScan
+			# update flag
 			flg=1
 		fi
 	;;
