@@ -13,55 +13,62 @@
 
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 <script type="text/javascript">//<![CDATA[
-	
-	XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "modem", "lte_scancell")%>', null,
-		function(x, rv)
-		{
-			const data = rv.log;
-        	const dataArr = data.split('\n');
-        	const table = document.getElementById('table-data');
-        	const tableHeader = `<tr>
-      				<th>TYPE </th>
-      				<th>OPERATOR </th>
-      				<th>COUNTRY </th>
-      				<th>PROTOCOL </th>
-      				<th>SCHEME </th>
-      				<th>MCC </th>
-      				<th>MNC </th>
-      				<th>CID </th>
-      				<th>PCID </th>
-      				<th>EARFCN </th>
-      				<th>FREQ BAND IND </th>
-      				<th>UL BW </th>
-      				<th>DL BW </th>
-      				<th>TAC </th>
-      				<th>RSRP </th>
-      				<th>RSRQ </th>
-      				<th>RSSI </th>
-      				<th>SINR </th>
-      				<th>SRXLEV </th>
-      				<th>CELL RSP </th>
-      				<th>SNIS </th>
-      				<th>SIS </th>
-      				<th>TXL </th>
-      				<th>TXH </th>
-    			</tr>`;
-        
-        	const tableBody = dataArr
-        	  .map(tr => {
-        	    const onlineArr = tr.split(' ');
-        	    const onlineStr = onlineArr.map(td => `<td>${td}</td>`).join('\t');
-        	    return `<tr>${onlineStr}</tr>`
-        	  })
-        	  .join('\n');
-    
-    		table.innerHTML = tableHeader + tableBody;
-		}
-	);
-
+		
 	function startScan(btn)
 	{
-		alert('Hello world!');
+		// Change button state while scanning
+		btn.disabled = true;
+		btn.value    = '<%:Scanning...%>';
+		// Start scanning
+		XHR.get('<%=luci.dispatcher.build_url("admin", "modem", "lte_scancell")%>',
+			null,
+			function(x, rv)
+			{
+				const data = rv.log;
+				const dataArr = data.split('\n');
+				const table = document.getElementById('table-data');
+				const tableHeader = `<tr>
+						<th>TYPE </th>
+						<th>OPERATOR </th>
+						<th>COUNTRY </th>
+						<th>PROTOCOL </th>
+						<th>SCHEME </th>
+						<th>MCC </th>
+						<th>MNC </th>
+						<th>CID </th>
+						<th>PCID </th>
+						<th>EARFCN </th>
+						<th>FREQ BAND IND </th>
+						<th>UL BW </th>
+						<th>DL BW </th>
+						<th>TAC </th>
+						<th>RSRP </th>
+						<th>RSRQ </th>
+						<th>RSSI </th>
+						<th>SINR </th>
+						<th>SRXLEV </th>
+						<th>CELL RSP </th>
+						<th>SNIS </th>
+						<th>SIS </th>
+						<th>TXL </th>
+						<th>TXH </th>
+					</tr>`;
+			
+				const tableBody = dataArr
+				.map(tr => {
+					const onlineArr = tr.split(' ');
+					const onlineStr = onlineArr.map(td => `<td>${td}</td>`).join('\t');
+					return `<tr>${onlineStr}</tr>`
+				})
+				.join('\n');
+		
+				table.innerHTML = tableHeader + tableBody;
+				// re-init button
+				btn.disabled = false;
+				btn.value = '<%:Scan cell%>';
+			}
+		);
+		return false;
 	}
 
 //]]></script>
