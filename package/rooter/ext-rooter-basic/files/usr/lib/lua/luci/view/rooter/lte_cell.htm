@@ -59,13 +59,25 @@
 		}
 	);
 
+	function startScan(btn)
+	{
+		alert('Hello world!');
+	}
+
 //]]></script>
 <div class="cbi-map" id="cbi-modem">
 <h2><a id="content" name="content"><%:Modem Scan Cell Information%></a></h2>
 <div class="cbi-map-descr"> </div>
 <fieldset class="cbi-section" id="cbi-mod">
+	<table>
+		<tr>
+			<td><div align="left"> 
+				<input type="button" class="cbi-button cbi-button-apply" value="<%:Scan cell%>" onclick="return startScan(this)" />
+			</div></td>
+		</tr>
+	</table>
 	<legend><%:Log Data%></legend>
-	        <table id="table-data"></table>
+	<table id="table-data"></table>
 </fieldset>
 <br></br>
 </div>
