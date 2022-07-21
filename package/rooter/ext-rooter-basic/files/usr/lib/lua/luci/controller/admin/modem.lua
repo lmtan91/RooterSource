@@ -15,6 +15,7 @@ function index()
 	end
 	entry({"admin", "modem", "log"}, template("rooter/log"), translate("Connection Log"), 60)
 	entry({"admin", "modem", "misc"}, template("rooter/misc"), translate("Miscellaneous"), 40)
+	entry({"admin", "modem", "lte"}, template("rooter/lte_cell"), translate("Cell tower scan"), 40)
 	
 	entry({"admin", "modem", "block"},
 		template("rooter/bandlock"))
@@ -38,6 +39,7 @@ function index()
 	entry({"admin", "modem", "clear_log"}, call("action_clear_log"))
 	entry({"admin", "modem", "externalip"}, call("action_externalip"))
 	entry({"admin", "modem", "send_scancmd"}, call("action_send_scancmd"))
+	entry({"admin", "modem", "lte_scancell"}, call("action_lte_scancell"))
 	entry({"admin", "modem", "send_lockcmd"}, call("action_send_lockcmd"))
 	entry({"admin", "modem", "extping"}, call("action_extping"))
 	entry({"admin", "modem", "change_cell"}, call("action_change_cell"))
@@ -77,6 +79,25 @@ function action_get_log()
 		file:close()
 	else
 		rv["log"] = translate("No entries in log file")
+	end
+
+	luci.http.prepare_content("application/json")
+	luci.http.write_json(rv)
+end
+
+function action_lte_scancell()
+	local rv ={}
+	local file
+	os.execute("/usr/lib/rooter/luci/lte826_scancmd.sh")
+
+	result = "/tmp/quectelScan"
+	file = io.open(result, "r")
+	if file ~= nil then
+		rv["log"] = file:read("*all")
+		file:close()
+		os.execute("/usr/lib/rooter/luci/luaops.sh delete /tmp/quectelScan")
+	else
+		rv["log"] = "No entries in log file"
 	end
 
 	luci.http.prepare_content("application/json")
