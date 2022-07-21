@@ -55,6 +55,7 @@
 					</tr>`;
 			
 				const tableBody = dataArr
+				.filter(tr=>tr)
 				.map(tr => {
 					const onlineArr = tr.split(' ');
 					const onlineStr = onlineArr.map(td => `<td>${td}</td>`).join('\t');
