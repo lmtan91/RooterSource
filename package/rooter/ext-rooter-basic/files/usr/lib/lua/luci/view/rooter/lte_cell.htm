@@ -62,7 +62,7 @@
 					let onlineStr = onlineArr.map(td => `<td>${td}</td>`).join('\t');
 					if(index > 0)
 					{
-						onlineStr = onlineStr + `<td><button class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='getData(${index},this)' >Lock cell</button></td>`
+						onlineStr = onlineStr + `<td><button class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this)' >Lock cell</button></td>`
 					}
 					return `<tr id='tr-${index}' >${onlineStr}</tr>`
 				})
@@ -76,19 +76,27 @@
 		return false;
 	}
 
-	function getData(index,btn) {
+	function lockCell(index,btn) {
 		// Change button state while locking
 		btn.disabled  = true;
 		btn.innerHTML = '<%:Locking...%>';
 
-		// handle event request
+		// Parse PCID & EARFCN
 		const id = `tr-${index}`;
 		const tr = document.getElementById(id);
 		const rowData = tr.querySelectorAll("td");
 		const PCID = rowData[8].innerHTML;
 		const EARFCN = rowData[9].innerHTML;
 		console.log(PCID, EARFCN)
-	
+
+		// Request lock cell to back-end
+		XHR.get('<%=luci.dispatcher.build_url("admin", "modem", "lte_lockcell")%>',
+			{ PCID:PCID , EARFCN:EARFCN},
+			function(x, rv)
+			{
+			}
+		);
+		
 		// re-init button
 		btn.innerHTML = '<%:Locked%>';
 	}
