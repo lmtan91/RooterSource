@@ -114,9 +114,9 @@ case $uVid in
 			;;
 			"0306" )
 				M1='AT+GMR'
-				OX=$($ROOTER/gcom/gcom-locked "$CPORT" "run-at.gcom" "$CURRMODEM" "$M1")
+				OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M1")
 				EP06E=$(echo $OX | grep "EP06E")
-				if [ ! -z $EP06E ]; then # EP06E
+				if [ ! -z "$EP06E" ]; then # EP06E
 					M3='1a080800d5'
 				else # EP06-A
 					M3="2000001003300185A"
@@ -255,12 +255,12 @@ OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
 OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
 log "$OX"
 ERR=$(echo "$OX" | grep "ERROR")
-if [ ! -z $ERR ]; then
+if [ ! -z "$ERR" ]; then
 	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
 	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
 	log "$OX"
 fi
-if [ ! -z $ERR ]; then
+if [ ! -z "$ERR" ]; then
 	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
 	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
 	log "$OX"
