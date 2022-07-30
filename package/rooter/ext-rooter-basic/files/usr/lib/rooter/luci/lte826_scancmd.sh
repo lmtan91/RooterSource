@@ -268,8 +268,8 @@ fi
 log "$OX"
 echo "$OX" > /tmp/quectelScanx
 rm -f /tmp/quectelScan
-echo "Cell Scanner Start ..." > /tmp/quectelScan
-echo " " >> /tmp/quectelScan
+# echo "Cell Scanner Start ..." > /tmp/quectelScan
+# echo " " >> /tmp/quectelScan
 flg=0
 
 #data print to UI
@@ -412,8 +412,8 @@ rm -f /tmp/quectelScanx
 if [ $flg -eq 0 ]; then
 	echo "No Neighbouring cells were found" >> /tmp/quectelScan
 fi
-echo " " >> /tmp/quectelScan
-echo "Done" >> /tmp/quectelScan
+# echo " " >> /tmp/quectelScan
+# echo "Done" >> /tmp/quectelScan
 
 case $uVid in
 	"2c7c" )
