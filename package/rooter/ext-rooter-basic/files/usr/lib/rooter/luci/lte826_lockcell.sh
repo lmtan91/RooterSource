@@ -6,7 +6,7 @@ log() {
 	logger -t "Quectel Lockcell" "$@"
 }
 
-if [$# -lt 1];then
+if [ $# -lt 1 ];then
     log 'Do not receive any cell info to log'
     exit 1
 fi
