@@ -94,11 +94,11 @@
 			{ PCID:PCID , EARFCN:EARFCN},
 			function(x, rv)
 			{
+				// re-init button
+				btn.innerHTML = '<%:Locked%>';
 			}
 		);
-		
-		// re-init button
-		btn.innerHTML = '<%:Locked%>';
+		return false;
 	}
 //]]></script>
 <div class="cbi-map" id="cbi-modem">
