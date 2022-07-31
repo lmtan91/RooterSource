@@ -102,6 +102,7 @@ case $uVid in
 	"2c7c" )
 		M2='AT+QENG="neighbourcell"'
 		M5=""
+		M6=""
 		case $uPid in
 			"0125" ) # EC25-A
 				EC25=$(echo $model | grep "EC25-AF")
@@ -117,11 +118,13 @@ case $uVid in
 				OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M1")
 				EP06E=$(echo $OX | grep "EP06E")
 				if [ ! -z "$EP06E" ]; then # EP06E
-					M3='1a080800d5'
+				  # M3='1a080800d5'
+					M3='1a1880800d5'
 				else # EP06-A
 					M3="2000001003300185A"
 				fi
 				M4='AT+QCFG="band",0,'$M3',0'
+				M6='AT+QENG="servingcell"'
 			;;
 			"030b" ) # EM060
 				M3="420000A7E23B0E38DF"
@@ -251,25 +254,31 @@ esac
 
 # run AT command
 export TIMEOUT="10"
+# Scan serving cell 
+if [ ! -z "$M6" ]; then
+	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M6")
+	log "$OX"
+	ERR=$(echo "$OX" | grep "ERROR")
+	if [ ! -z "$ERR" ]; then
+		log "$ERR"
+		ERR=""
+	else
+		echo "$OX" > /tmp/quectelScanx
+	fi
+fi
+
+# Scan neighbour cell 
 OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
-OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
-log "$OX"
 ERR=$(echo "$OX" | grep "ERROR")
 if [ ! -z "$ERR" ]; then
 	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
-	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
-	log "$OX"
 fi
 if [ ! -z "$ERR" ]; then
 	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
-	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M2")
-	log "$OX"
 fi
 log "$OX"
-echo "$OX" > /tmp/quectelScanx
+echo "$OX" >> /tmp/quectelScanx
 rm -f /tmp/quectelScan
-# echo "Cell Scanner Start ..." > /tmp/quectelScan
-# echo " " >> /tmp/quectelScan
 flg=0
 
 #data print to UI
@@ -412,8 +421,6 @@ rm -f /tmp/quectelScanx
 if [ $flg -eq 0 ]; then
 	echo "No Neighbouring cells were found" >> /tmp/quectelScan
 fi
-# echo " " >> /tmp/quectelScan
-# echo "Done" >> /tmp/quectelScan
 
 case $uVid in
 	"2c7c" )
