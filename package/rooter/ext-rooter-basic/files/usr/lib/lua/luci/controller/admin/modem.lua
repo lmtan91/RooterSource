@@ -108,7 +108,7 @@ end
 function action_lte_lockcell()
 	local PCID = luci.http.formvalue("PCID")
 	local EARFCN = luci.http.formvalue("EARFCN")
-	os.execute("/usr/lib/rooter/luci/lte826_lockcell.sh" .. PCID .. EARFCN)
+	os.execute("/usr/lib/rooter/luci/lte826_lockcell.sh " .. PCID .. " " .. EARFCN)
 end
 
 function action_disconnect()
