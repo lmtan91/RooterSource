@@ -40,6 +40,7 @@ function index()
 	entry({"admin", "modem", "externalip"}, call("action_externalip"))
 	entry({"admin", "modem", "send_scancmd"}, call("action_send_scancmd"))
 	entry({"admin", "modem", "lte_scancell"}, call("action_lte_scancell"))
+	entry({"admin", "modem", "lte_lockcell"}, call("action_lte_lockcell"))
 	entry({"admin", "modem", "send_lockcmd"}, call("action_send_lockcmd"))
 	entry({"admin", "modem", "extping"}, call("action_extping"))
 	entry({"admin", "modem", "change_cell"}, call("action_change_cell"))
@@ -102,6 +103,12 @@ function action_lte_scancell()
 
 	luci.http.prepare_content("application/json")
 	luci.http.write_json(rv)
+end
+
+function action_lte_lockcell()
+	local PCID = luci.http.formvalue("PCID")
+	local EARFCN = luci.http.formvalue("EARFCN")
+	os.execute("/usr/lib/rooter/luci/lte826_lockcell.sh " .. PCID .. " " .. EARFCN)
 end
 
 function action_disconnect()

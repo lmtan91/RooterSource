@@ -52,17 +52,21 @@
 						<th>SIS </th>
 						<th>TXL </th>
 						<th>TXH </th>
+						<th></th>
 					</tr>`;
 			
 				const tableBody = dataArr
 				.filter(tr=>tr)
-				.map(tr => {
+				.map((tr,index) => {
 					const onlineArr = tr.split(' ');
-					const onlineStr = onlineArr.map(td => `<td>${td}</td>`).join('\t');
-					return `<tr>${onlineStr}</tr>`
+					let onlineStr = onlineArr.map(td => `<td>${td}</td>`).join('\t');
+					if(index > 0)
+					{
+						onlineStr = onlineStr + `<td><button class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this)' >Lock cell</button></td>`
+					}
+					return `<tr id='tr-${index}' >${onlineStr}</tr>`
 				})
 				.join('\n');
-		
 				table.innerHTML = tableHeader + tableBody;
 				// re-init button
 				btn.disabled = false;
@@ -72,6 +76,30 @@
 		return false;
 	}
 
+	function lockCell(index,btn) {
+		// Change button state while locking
+		btn.disabled  = true;
+		btn.innerHTML = '<%:Locking...%>';
+
+		// Parse PCID & EARFCN
+		const id = `tr-${index}`;
+		const tr = document.getElementById(id);
+		const rowData = tr.querySelectorAll("td");
+		const PCID = rowData[8].innerHTML;
+		const EARFCN = rowData[9].innerHTML;
+		console.log(PCID, EARFCN)
+
+		// Request lock cell to back-end
+		XHR.get('<%=luci.dispatcher.build_url("admin", "modem", "lte_lockcell")%>',
+			{ PCID:PCID , EARFCN:EARFCN},
+			function(x, rv)
+			{
+				// re-init button
+				btn.innerHTML = '<%:Locked%>';
+			}
+		);
+		return false;
+	}
 //]]></script>
 <div class="cbi-map" id="cbi-modem">
 <h2><a id="content" name="content"><%:Modem Scan Cell Information%></a></h2>
