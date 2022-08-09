@@ -6,6 +6,10 @@
 	  text-align: center;
 	}
 
+	.high-light {
+		color: red !important;
+	}
+
 	table {
 	  width: 100%;
 	}
@@ -54,12 +58,24 @@
 						<th>TXH </th>
 						<th></th>
 					</tr>`;
-			
+				
+				let connectedPCID;
+
 				const tableBody = dataArr
 				.filter(tr=>tr)
 				.map((tr,index) => {
 					const onlineArr = tr.split(' ');
-					let onlineStr = onlineArr.map(td => `<td>${td}</td>`).join('\t');
+
+					if (index == 0){
+						connectedPCID = onlineArr[8];
+						console.log(connectedPCID);
+					}
+
+					let IsConnected = (onlineArr[8] == connectedPCID);
+
+					let onlineStr = onlineArr.map(td => `<td class=${IsConnected && index > 0 ? "high-light" : ""}>
+														  ${td}
+														 </td>`).join('\t');
 					if(index > 0)
 					{
 						onlineStr = onlineStr + `<td><button class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this)' >Lock cell</button></td>`
