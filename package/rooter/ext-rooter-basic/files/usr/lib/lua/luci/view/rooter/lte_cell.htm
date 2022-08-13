@@ -87,6 +87,8 @@
 				// re-init button
 				btn.disabled = false;
 				btn.value = '<%:Scan cell%>';
+				// set timeout
+				setTimeout(GenCSV,500);
 			}
 		);
 		return false;
@@ -116,6 +118,36 @@
 		);
 		return false;
 	}
+
+	function GenCSV() {
+		var data = [];
+		var rows = document.querySelectorAll("#table-data tr");
+		for (var i = 0; i < rows.length; i++) {
+			var row = [], cols = rows[i].querySelector("td, th");
+			for( var j = 0; j < cols.length; j++)
+			{
+				row.push(cols[j].innerHTML);
+			}
+
+			data.push(row.join(","));
+		}
+		downloadCSVFile(data.join("\n"), "LogData.csv");
+	}
+
+	function downloadCSVFile(csv, filename) {
+		var csv_file, download_link;
+
+		csv_file = new Blob([csv], {type: "text/csv"});
+
+		download_link = document.getElementById("download_csv");
+
+		download_link.download = filename;
+
+		download_link.href = window.URL.createObjectURL(csv_file);
+
+		download_link.style.display = "inline-block";
+	}
+
 //]]></script>
 <div class="cbi-map" id="cbi-modem">
 <h2><a id="content" name="content"><%:Modem Scan Cell Information%></a></h2>
@@ -123,6 +155,7 @@
 <fieldset class="cbi-section" id="cbi-mod">
 	<div align="left"> 
 		<input type="button" class="cbi-button cbi-button-apply" value="<%:Scan cell%>" onclick="return startScan(this)" />
+		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV File</a>
 	</div>
 	</table>
 	<legend><%:Log Data%></legend>
