@@ -101,8 +101,8 @@
 		const id = `tr-${index}`;
 		const tr = document.getElementById(id);
 		const rowData = tr.querySelectorAll("td");
-		const PCID = rowData[8].innerHTML;
-		const EARFCN = rowData[9].innerHTML;
+		const PCID = rowData[8].innerHTML.replace(/\s/g, '');
+		const EARFCN = rowData[9].innerHTML.replace(/\s/g, '');
 		console.log(PCID, EARFCN)
 
 		// Request lock cell to back-end
