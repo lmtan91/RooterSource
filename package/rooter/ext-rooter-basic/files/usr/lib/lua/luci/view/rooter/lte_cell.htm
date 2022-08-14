@@ -73,9 +73,7 @@
 
 					let IsConnected = (onlineArr[8] == connectedPCID);
 
-					let onlineStr = onlineArr.map(td => `<td class=${IsConnected && index > 0 ? "high-light" : ""}>
-														  ${td}
-														 </td>`).join('\t');
+					let onlineStr = onlineArr.map(td => `<td class=${IsConnected && index > 0 ? "high-light" : ""}>${td}</td>`).join('\t');
 					if(index > 0)
 					{
 						onlineStr = onlineStr + `<td><button class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this)' >Lock cell</button></td>`
