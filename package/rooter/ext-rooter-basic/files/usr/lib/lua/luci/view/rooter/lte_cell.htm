@@ -138,8 +138,9 @@
 				table.innerHTML = tableHeader + tableBody;
 				
 				// set timeout
-				setTimeout(GenCSV,500);
 				document.getElementById("loading").style.display="none";
+				document.getElementById("download_csv").style.display = "inline-block";
+				setTimeout(GenCSV,500);
 				// Scan done
 				console.log("Stop Scan");	
 			}
@@ -197,7 +198,7 @@
 
 		download_link.href = window.URL.createObjectURL(csv_file);
 
-		download_link.style.display = "inline-block";
+		// download_link.style.display = "inline-block";
 	}
 
 //]]></script>
