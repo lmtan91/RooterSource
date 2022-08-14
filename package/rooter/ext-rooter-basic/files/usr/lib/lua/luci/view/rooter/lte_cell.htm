@@ -17,9 +17,16 @@
 
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 <script type="text/javascript">//<![CDATA[
-		
+	
+	window.addEventListener('load', function () {
+		console.log("Load done");
+		startScan();
+		setInterval(startScan, 300000);
+	})
+
 	function startScan()
 	{
+		console.log("Start Scan");
 		// Start scanning
 		XHR.get('<%=luci.dispatcher.build_url("admin", "modem", "lte_scancell")%>',
 			null,
@@ -85,6 +92,8 @@
 				
 				// set timeout
 				setTimeout(GenCSV,500);
+				// Scan done
+				console.log("Stop Scan");
 			}
 		);
 		return false;
