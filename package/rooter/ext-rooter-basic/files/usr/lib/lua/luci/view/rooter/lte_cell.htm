@@ -123,13 +123,12 @@
 		var data = [];
 		var rows = document.querySelectorAll("#table-data tr");
 		for (var i = 0; i < rows.length; i++) {
-			var row = [], cols = rows[i].querySelector("td, th");
-			for( var j = 0; j < cols.length; j++)
-			{
-				row.push(cols[j].innerHTML);
+			var row = [], cols = rows[i].querySelectorAll("td, th");
+			for (var j = 0; j < cols.length-1 ; j++) {
+					row.push(cols[j].innerText);
 			}
-
-			data.push(row.join(","));
+					
+			data.push(row.join(",")); 		
 		}
 		downloadCSVFile(data.join("\n"), "LogData.csv");
 	}
@@ -155,7 +154,7 @@
 <fieldset class="cbi-section" id="cbi-mod">
 	<div align="left"> 
 		<input type="button" class="cbi-button cbi-button-apply" value="<%:Scan cell%>" onclick="return startScan(this)" />
-		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV File</a>
+		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV</a>
 	</div>
 	</table>
 	<legend><%:Log Data%></legend>
