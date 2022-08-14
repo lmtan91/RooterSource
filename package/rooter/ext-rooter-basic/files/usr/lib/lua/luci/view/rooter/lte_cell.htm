@@ -18,11 +18,8 @@
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 <script type="text/javascript">//<![CDATA[
 		
-	function startScan(btn)
+	function startScan()
 	{
-		// Change button state while scanning
-		btn.disabled = true;
-		btn.value    = '<%:Scanning...%>';
 		// Start scanning
 		XHR.get('<%=luci.dispatcher.build_url("admin", "modem", "lte_scancell")%>',
 			null,
@@ -85,9 +82,7 @@
 				})
 				.join('\n');
 				table.innerHTML = tableHeader + tableBody;
-				// re-init button
-				btn.disabled = false;
-				btn.value = '<%:Scan cell%>';
+				
 				// set timeout
 				setTimeout(GenCSV,500);
 			}
@@ -154,7 +149,6 @@
 <div class="cbi-map-descr"> </div>
 <fieldset class="cbi-section" id="cbi-mod">
 	<div align="left"> 
-		<input type="button" class="cbi-button cbi-button-apply" value="<%:Scan cell%>" onclick="return startScan(this)" />
 		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV</a>
 	</div>
 	</table>
