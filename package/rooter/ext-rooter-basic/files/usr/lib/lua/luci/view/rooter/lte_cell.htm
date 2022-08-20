@@ -13,16 +13,67 @@
 	table {
 	  width: 100%;
 	}
+
+	.loader {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		position: relative;
+		animation: rotate 1s linear infinite
+	}
+
+	.loader::before {
+		content: "";
+		box-sizing: border-box;
+		position: absolute;
+		inset: 0px;
+		border-radius: 50%;
+		border: 5px solid rgb(184, 7, 116);
+		animation: prixClipFix 2s linear infinite ;
+	}
+
+	@keyframes rotate {
+		100%   {transform: rotate(360deg)}
+	}
+
+	@keyframes prixClipFix {
+		0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+		25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+		50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+		75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+		100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+	}
+	#loading{
+		position:relative;
+		width: 100%;
+		height: 5rem;
+		left: 0;
+		top: 0;
+		z-index: 999;
+		background-color: transparent;
+	}
+	fieldset#cbi-mod{
+		position: relative;
+	}
 </style>
 
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
 <script type="text/javascript">//<![CDATA[
-		
-	function startScan(btn)
+	
+	window.addEventListener('load', function () {
+		console.log("Load done");
+		document.getElementById("loading").style.display="block";
+		startScan();
+		setInterval(startScan, 300000);
+	})
+
+	function startScan()
 	{
-		// Change button state while scanning
-		btn.disabled = true;
-		btn.value    = '<%:Scanning...%>';
+		console.log("Start Scan");
 		// Start scanning
 		XHR.get('<%=luci.dispatcher.build_url("admin", "modem", "lte_scancell")%>',
 			null,
@@ -85,11 +136,13 @@
 				})
 				.join('\n');
 				table.innerHTML = tableHeader + tableBody;
-				// re-init button
-				btn.disabled = false;
-				btn.value = '<%:Scan cell%>';
+				
 				// set timeout
+				document.getElementById("loading").style.display="none";
+				document.getElementById("download_csv").style.display = "inline-block";
 				setTimeout(GenCSV,500);
+				// Scan done
+				console.log("Stop Scan");	
 			}
 		);
 		return false;
@@ -145,7 +198,7 @@
 
 		download_link.href = window.URL.createObjectURL(csv_file);
 
-		download_link.style.display = "inline-block";
+		// download_link.style.display = "inline-block";
 	}
 
 //]]></script>
@@ -154,12 +207,12 @@
 <div class="cbi-map-descr"> </div>
 <fieldset class="cbi-section" id="cbi-mod">
 	<div align="left"> 
-		<input type="button" class="cbi-button cbi-button-apply" value="<%:Scan cell%>" onclick="return startScan(this)" />
 		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV</a>
 	</div>
 	</table>
 	<legend><%:Log Data%></legend>
 	<table id="table-data"></table>
+	<div id="loading" style="display: none;"><span class="loader"></span></div>
 </fieldset>
 <br></br>
 </div>
