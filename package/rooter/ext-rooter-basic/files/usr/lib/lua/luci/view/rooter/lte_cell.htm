@@ -140,6 +140,7 @@
 				// set timeout
 				document.getElementById("loading").style.display="none";
 				document.getElementById("download_csv").style.display = "inline-block";
+				document.getElementById("trigger_scan").style.display = "inline-block";
 				setTimeout(GenCSV,500);
 				// Scan done
 				console.log("Stop Scan");	
@@ -147,6 +148,13 @@
 		);
 		return false;
 	}
+
+	function startScanOption(btn) {
+		console.log("bro");
+		btn.disabled = true;
+		btn.value = '<%:OFF%>';
+	}
+
 
 	function lockCell(index,btn) {
 		// Change button state while locking
@@ -206,7 +214,8 @@
 <h2><a id="content" name="content"><%:Modem Scan Cell Information%></a></h2>
 <div class="cbi-map-descr"> </div>
 <fieldset class="cbi-section" id="cbi-mod">
-	<div align="left"> 
+	<div align="left">
+		<input id="trigger_scan" type="button" class="cbi-button cbi-button-apply" value="<%:ON%>" style="display:none" onclick="return startScanOption(this)" /> 
 		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV</a>
 	</div>
 	</table>
