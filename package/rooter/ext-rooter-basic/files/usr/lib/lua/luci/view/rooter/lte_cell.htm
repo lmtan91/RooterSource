@@ -68,7 +68,6 @@
 		console.log("Load done");
 		document.getElementById("loading").style.display="block";
 		startScan();
-		setInterval(startScan, 300000);
 	})
 
 	function startScan()
@@ -150,9 +149,19 @@
 	}
 
 	function startScanOption(btn) {
-		console.log("bro");
-		btn.disabled = true;
-		btn.value = '<%:OFF%>';
+		const btnValue = btn.value;
+		if(btnValue == "ON")
+		{
+			console.log("Start automatic scan");
+			periodicScanID = setInterval(startScan, 300000);
+			btn.value = '<%:OFF%>';
+		}
+		else
+		{
+			console.log("Stop automatic scan");
+			clearInterval(periodicScanID);
+			btn.value = '<%:ON%>';
+		}
 	}
 
 
