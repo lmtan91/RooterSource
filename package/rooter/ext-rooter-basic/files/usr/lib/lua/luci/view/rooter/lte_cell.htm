@@ -155,7 +155,8 @@
 		if(btnValue == "ON")
 		{
 			console.log("Start automatic scan");
-			periodicScanID = setInterval(startScan, 300000);
+			query_apply_ScanCfg()
+			periodicScanID = setInterval(startScan, cfgTime);
 			btn.value = '<%:OFF%>';
 		}
 		else
@@ -166,9 +167,17 @@
 		}
 	}
 	
-	function applyScanCfg(btn){
-		console.log("huhu");
+	function query_apply_ScanCfg(btn){
 		cfgTime=document.getElementById("scanCFG").value;
+		if(cfgTime > 1)
+		{
+			cfgTime = (cfgTime - 1) * 5; // convert from option value to minutes
+		}
+		else
+		{	
+			cfgTime = 5; // set default periodic scan is 5 minutes
+		}
+		cfgTime = cfgTime * 60 * 1000; // convert from minute to mili-second 
 		console.log(cfgTime);
 	}	
 
@@ -246,9 +255,10 @@
 			<option value="9"><%:40 Mins%></option>
 			<option value="10"><%:45 Mins%></option>
 			<option value="11"><%:50 Mins%></option>
-			<option value="12"><%:60 Mins%></option>
+			<option value="12"><%:55 Mins%></option>
+			<option value="13"><%:60 Mins%></option>
 		</select>
-		<input id="scan_cfg_bt" type="button" class="cbi-button cbi-button-apply" value="<%:APPLY SCAN CONFIG%>" style="display:none" onclick="return applyScanCfg(this)" />
+		<input id="scan_cfg_bt" type="button" class="cbi-button cbi-button-apply" value="<%:APPLY SCAN CONFIG%>" style="display:none" onclick="return query_apply_ScanCfg()" />
 	</div>
 	</table>
 	<legend><%:Log Data%></legend>
