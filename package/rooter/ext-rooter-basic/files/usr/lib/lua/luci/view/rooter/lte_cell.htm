@@ -167,7 +167,8 @@
 		}
 	}
 	
-	function query_apply_ScanCfg(btn){
+	function query_apply_ScanCfg(){
+		// calculate configure time
 		cfgTime=document.getElementById("scanCFG").value;
 		if(cfgTime > 1)
 		{
@@ -179,8 +180,15 @@
 		}
 		cfgTime = cfgTime * 60 * 1000; // convert from minute to mili-second 
 		console.log(cfgTime);
-	}	
 
+		// update cfgTime runtime
+		// check if scanning - update configure time and restart
+		if(document.getElementById("trigger_scan").value == "OFF")
+		{
+			clearInterval(periodicScanID);
+			periodicScanID = setInterval(startScan, cfgTime);
+		}
+	}	
 
 	function lockCell(index,btn) {
 		// Change button state while locking
@@ -243,7 +251,7 @@
 	<div align="left">
 		<input id="trigger_scan" type="button" class="cbi-button cbi-button-apply" value="<%:ON%>" style="display:none" onclick="return startScanOption(this)" /> 
 		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV</a>
-		<select style="visibility:hidden;width:auto" name="net_mode" id="scanCFG">
+		<select style="visibility:hidden;width:auto" name="periodic_scan_time" id="scanCFG">
 			<option value="1" selected="selected"><%:Default%></option>
 			<option value="2"><%:5 Mins%></option>
 			<option value="3"><%:10 Mins%></option>
