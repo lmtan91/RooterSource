@@ -140,6 +140,8 @@
 				document.getElementById("loading").style.display="none";
 				document.getElementById("download_csv").style.display = "inline-block";
 				document.getElementById("trigger_scan").style.display = "inline-block";
+				document.getElementById("scanCFG").style.visibility="visible";
+				document.getElementById("scan_cfg_bt").style.display = "inline-block";
 				setTimeout(GenCSV,500);
 				// Scan done
 				console.log("Stop Scan");	
@@ -163,6 +165,12 @@
 			btn.value = '<%:ON%>';
 		}
 	}
+	
+	function applyScanCfg(btn){
+		console.log("huhu");
+		cfgTime=document.getElementById("scanCFG").value;
+		console.log(cfgTime);
+	}	
 
 
 	function lockCell(index,btn) {
@@ -226,6 +234,21 @@
 	<div align="left">
 		<input id="trigger_scan" type="button" class="cbi-button cbi-button-apply" value="<%:ON%>" style="display:none" onclick="return startScanOption(this)" /> 
 		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV</a>
+		<select style="visibility:hidden;width:auto" name="net_mode" id="scanCFG">
+			<option value="1" selected="selected"><%:Default%></option>
+			<option value="2"><%:5 Mins%></option>
+			<option value="3"><%:10 Mins%></option>
+			<option value="4"><%:15 Mins%></option>
+			<option value="5"><%:20 Mins%></option>
+			<option value="6"><%:25 Mins%></option>
+			<option value="7"><%:30 Mins%></option>
+			<option value="8"><%:35 Mins%></option>
+			<option value="9"><%:40 Mins%></option>
+			<option value="10"><%:45 Mins%></option>
+			<option value="11"><%:50 Mins%></option>
+			<option value="12"><%:60 Mins%></option>
+		</select>
+		<input id="scan_cfg_bt" type="button" class="cbi-button cbi-button-apply" value="<%:APPLY SCAN CONFIG%>" style="display:none" onclick="return applyScanCfg(this)" />
 	</div>
 	</table>
 	<legend><%:Log Data%></legend>
