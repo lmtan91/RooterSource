@@ -123,13 +123,13 @@
 
 					let IsConnected = (onlineArr[8] == connectedPCID);
 
-					let onlineStr = onlineArr.map(td => `<td class=${IsConnected && index > 0 ? "high-light" : ""}>` + 
+					let onlineStr = onlineArr.map((td, index) => `<td type=${NameOfColumn(index)} class=${IsConnected && index > 0 ? "high-light" : ""}>` + 
 														`${td}` + 
 														`</td>`).join('\t');
 														
 					if(index > 0)
 					{
-						onlineStr = onlineStr + `<td><button class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this)' >Lock cell</button></td>`
+						onlineStr = onlineStr + `<td><button  id='lckBT-${index}' class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this)' >Lock cell</button></td>`
 					}
 					return `<tr id='tr-${index}' >${onlineStr}</tr>`
 				})
@@ -141,13 +141,28 @@
 				document.getElementById("download_csv").style.display = "inline-block";
 				document.getElementById("trigger_scan").style.display = "inline-block";
 				document.getElementById("scanCFG").style.visibility="visible";
+				document.getElementById("connect_criteria").style.visibility="visible";
 				document.getElementById("scan_cfg_bt").style.display = "inline-block";
+				document.getElementById("auto_connect_bt").style.display = "inline-block";
 				setTimeout(GenCSV,500);
 				// Scan done
 				console.log("Stop Scan");	
 			}
 		);
 		return false;
+	}
+
+	function NameOfColumn(index)
+	{
+		switch (index)
+		{
+			case 14:
+				return "RSRP";
+			case 15:
+				return "RSRQ";
+			default:
+				return "default";
+		}
 	}
 
 	function startScanOption(btn) {
@@ -188,7 +203,23 @@
 			clearInterval(periodicScanID);
 			periodicScanID = setInterval(startScan, cfgTime);
 		}
-	}	
+	}
+	
+	function auto_connect(btn){
+		const criteria = document.getElementById("connect_criteria").value;
+		var columnData = document.querySelectorAll(`[type=${criteria}]`);
+		var criteriaArrVal = [];
+		for (var i = 1; i < columnData.length; i++) 
+		{
+			criteriaArrVal.push(parseInt(columnData[i].innerHTML));
+		}
+		console.log(criteriaArrVal);
+		const max = Math.max(...criteriaArrVal);
+		let index = criteriaArrVal.indexOf(max);
+		let lockBT = document.getElementById(`lckBT-${index+1}`);
+		lockCell(index+1,lockBT);
+		console.log(`"maxValue:" ${max} "index:" ${index}`); 
+	}
 
 	function lockCell(index,btn) {
 		// Change button state while locking
@@ -267,6 +298,12 @@
 			<option value="13"><%:60 Mins%></option>
 		</select>
 		<input id="scan_cfg_bt" type="button" class="cbi-button cbi-button-apply" value="<%:APPLY SCAN CONFIG%>" style="display:none" onclick="return query_apply_ScanCfg()" />
+		<select style="visibility:hidden;width:auto" name="periodic_scan_time" id="connect_criteria">
+			<option value="1" selected="selected"><%:Default%></option>
+			<option value="RSRP"><%:RSRP%></option>
+			<option value="RSRQ"><%:RSRQ%></option>
+		</select>
+		<input id="auto_connect_bt" type="button" class="cbi-button cbi-button-apply" value="<%:AUTO CONNECT%>" style="display:none" onclick="return auto_connect()" />
 	</div>
 	</table>
 	<legend><%:Log Data%></legend>
