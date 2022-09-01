@@ -219,7 +219,10 @@
 		var criteriaArrVal = [];
 		for (var i = 1; i < columnData.length; i++) 
 		{
-			criteriaArrVal.push(parseInt(columnData[i].innerHTML));
+			if(columnData[i].innerHTML != '-')
+			{
+				criteriaArrVal.push(parseInt(columnData[i].innerHTML));
+			}
 		}
 		console.log(criteriaArrVal);
 		const max = Math.max(...criteriaArrVal);
