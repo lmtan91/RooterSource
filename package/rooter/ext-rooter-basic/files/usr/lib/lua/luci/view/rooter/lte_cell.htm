@@ -211,7 +211,7 @@
 	function auto_connect(btn){
 		// Change button state while perform auto connection
 		btn.disabled  = true;
-		btn.value = '<%:Connecting...%>';
+		btn.value = '<%:CONNECTING...%>';
 		
 		// Filter the best cell
 		const criteria = document.getElementById("connect_criteria").value;
@@ -237,7 +237,7 @@
 	function lockCell(index,btn,isAutoMode) {
 		// Change button state while locking
 		btn.disabled  = true;
-		btn.innerHTML = '<%:Locking...%>';
+		btn.innerHTML = '<%:LOCKING...%>';
 
 		// Parse PCID & EARFCN
 		const id = `tr-${index}`;
