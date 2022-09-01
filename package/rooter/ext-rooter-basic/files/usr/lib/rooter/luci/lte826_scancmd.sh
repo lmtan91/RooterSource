@@ -125,6 +125,7 @@ case $uVid in
 				fi
 				M4='AT+QCFG="band",0,'$M3',0'
 				M6='AT+QENG="servingcell"'
+				M7='AT+QCFG="nwscanmode",0'
 			;;
 			"030b" ) # EM060
 				M3="420000A7E23B0E38DF"
@@ -254,6 +255,18 @@ esac
 
 # run AT command
 export TIMEOUT="10"
+
+# Configure to Scan all cell - fix issue cannot scan after locking cell
+if [ ! -z "$M7" ]; then
+	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M7")
+	log "$OX"
+	ERR=$(echo "$OX" | grep "ERROR")
+	if [ ! -z "$ERR" ]; then
+		log "$ERR"
+		ERR=""
+	fi
+fi
+
 # Scan serving cell 
 if [ ! -z "$M6" ]; then
 	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M6")
@@ -312,7 +325,7 @@ while IFS= read -r line
 do
 	case $uVid in
 	"2c7c" )
-		qm=$(echo $line" " | grep "+QENG:" | tr -d '"' | tr " " ",")
+		qm=$(echo $line" " | grep "+QENG:" | grep "LTE" | tr -d '"' | tr " " ",")
 		if [ "$qm" ]; then
 			TYPECELL=$(echo $qm | cut -d, -f2)
 			if [ "$TYPECELL" = "servingcell" ]; then
