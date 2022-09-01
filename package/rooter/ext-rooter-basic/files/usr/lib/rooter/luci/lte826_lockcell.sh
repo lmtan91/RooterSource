@@ -33,6 +33,7 @@ case $uVid in
             "0306" )
                 M1='AT+QCFG="nwscanmode",3'
                 OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M1")
+                log "$OX"
                 ERR=$(echo "$OX" | grep "ERROR")
                 if [ ! -z $ERR ];then
                     log "$ERR"
