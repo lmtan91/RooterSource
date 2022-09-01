@@ -129,7 +129,7 @@
 														
 					if(index > 0)
 					{
-						onlineStr = onlineStr + `<td><button  id='lckBT-${index}' class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this)' >Lock cell</button></td>`
+						onlineStr = onlineStr + `<td><button  id='lckBT-${index}' class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this,false)' >Lock cell</button></td>`
 					}
 					return `<tr id='tr-${index}' >${onlineStr}</tr>`
 				})
@@ -209,6 +209,11 @@
 	}
 	
 	function auto_connect(btn){
+		// Change button state while perform auto connection
+		btn.disabled  = true;
+		btn.value = '<%:Connecting...%>';
+		
+		// Filter the best cell
 		const criteria = document.getElementById("connect_criteria").value;
 		var columnData = document.querySelectorAll(`[type=${criteria}]`);
 		var criteriaArrVal = [];
@@ -219,12 +224,14 @@
 		console.log(criteriaArrVal);
 		const max = Math.max(...criteriaArrVal);
 		let index = criteriaArrVal.indexOf(max);
-		let lockBT = document.getElementById(`lckBT-${index+1}`);
-		lockCell(index+1,lockBT);
 		console.log(`"maxValue:" ${max} "index:" ${index}`); 
+
+		// Perform lock
+		let lockBT = document.getElementById(`lckBT-${index+1}`);
+		lockCell(index+1,lockBT,true);
 	}
 
-	function lockCell(index,btn) {
+	function lockCell(index,btn,isAutoMode) {
 		// Change button state while locking
 		btn.disabled  = true;
 		btn.innerHTML = '<%:Locking...%>';
@@ -244,6 +251,13 @@
 			{
 				// re-init button
 				btn.innerHTML = '<%:Locked%>';
+
+				// re-init auto connect button
+				if(isAutoMode==true)
+				{
+					document.getElementById("auto_connect_bt").disabled = false;
+					document.getElementById("auto_connect_bt").value = '<%:AUTO CONNECT%>';
+				}
 			}
 		);
 		return false;
@@ -301,11 +315,10 @@
 		</select>
 		<input id="scan_cfg_bt" type="button" class="cbi-button cbi-button-apply" value="<%:APPLY SCAN CONFIG%>" style="display:none" onclick="return query_apply_ScanCfg(true)" />
 		<select style="visibility:hidden;width:auto" name="periodic_scan_time" id="connect_criteria">
-			<option value="1" selected="selected"><%:Default%></option>
+			<option value="RSRP" selected="selected"><%:Default%></option>
 			<option value="RSRP"><%:RSRP%></option>
-			<option value="RSRQ"><%:RSRQ%></option>
 		</select>
-		<input id="auto_connect_bt" type="button" class="cbi-button cbi-button-apply" value="<%:AUTO CONNECT%>" style="display:none" onclick="return auto_connect()" />
+		<input id="auto_connect_bt" type="button" class="cbi-button cbi-button-apply" value="<%:AUTO CONNECT%>" style="display:none" onclick="return auto_connect(this)" />
 		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV</a>
 	</div>
 	</table>
