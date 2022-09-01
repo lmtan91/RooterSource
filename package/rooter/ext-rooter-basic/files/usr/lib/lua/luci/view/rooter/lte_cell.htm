@@ -170,8 +170,8 @@
 		if(btnValue == "ON")
 		{
 			console.log("Start automatic scan");
-			query_apply_ScanCfg()
-			periodicScanID = setInterval(startScan, cfgTime);
+			query_apply_ScanCfg(false);
+			periodicScanID = setInterval(startScan, cfgTimeMilSec);
 			btn.value = '<%:OFF%>';
 		}
 		else
@@ -182,26 +182,29 @@
 		}
 	}
 	
-	function query_apply_ScanCfg(){
+	function query_apply_ScanCfg(showAlert){
 		// calculate configure time
-		cfgTime=document.getElementById("scanCFG").value;
-		if(cfgTime > 1)
+		cfgTimeMin=document.getElementById("scanCFG").value;
+		if(cfgTimeMin == 0)
 		{
-			cfgTime = (cfgTime - 1) * 5; // convert from option value to minutes
+			cfgTimeMin = 5; // set default periodic scan is 5 minutes
 		}
-		else
-		{	
-			cfgTime = 5; // set default periodic scan is 5 minutes
-		}
-		cfgTime = cfgTime * 60 * 1000; // convert from minute to mili-second 
-		console.log(cfgTime);
+
+		cfgTimeMilSec = cfgTimeMin * 60 * 1000; // convert from minute to mili-second 
+		console.log(cfgTimeMilSec);
 
 		// update cfgTime runtime
 		// check if scanning - update configure time and restart
 		if(document.getElementById("trigger_scan").value == "OFF")
 		{
 			clearInterval(periodicScanID);
-			periodicScanID = setInterval(startScan, cfgTime);
+			periodicScanID = setInterval(startScan, cfgTimeMilSec);
+		}
+
+		// show alert to use if needed
+		if(showAlert == true)
+		{
+			alert("Change periodic scan time to:  " + cfgTimeMin + " minutes succeed");
 		}
 	}
 	
@@ -282,21 +285,21 @@
 	<div align="left">
 		<input id="trigger_scan" type="button" class="cbi-button cbi-button-apply" value="<%:ON%>" style="display:none" onclick="return startScanOption(this)" /> 
 		<select style="visibility:hidden;width:auto" name="periodic_scan_time" id="scanCFG">
-			<option value="1" selected="selected"><%:Default%></option>
-			<option value="2"><%:5 Mins%></option>
-			<option value="3"><%:10 Mins%></option>
-			<option value="4"><%:15 Mins%></option>
-			<option value="5"><%:20 Mins%></option>
-			<option value="6"><%:25 Mins%></option>
-			<option value="7"><%:30 Mins%></option>
-			<option value="8"><%:35 Mins%></option>
-			<option value="9"><%:40 Mins%></option>
-			<option value="10"><%:45 Mins%></option>
-			<option value="11"><%:50 Mins%></option>
-			<option value="12"><%:55 Mins%></option>
-			<option value="13"><%:60 Mins%></option>
+			<option value=0 selected="selected"><%:Default%></option>
+			<option value=5><%:5 Mins%></option>
+			<option value=10><%:10 Mins%></option>
+			<option value=15><%:15 Mins%></option>
+			<option value=20><%:20 Mins%></option>
+			<option value=25><%:25 Mins%></option>
+			<option value=30><%:30 Mins%></option>
+			<option value=35><%:35 Mins%></option>
+			<option value=40><%:40 Mins%></option>
+			<option value=45><%:45 Mins%></option>
+			<option value=50><%:50 Mins%></option>
+			<option value=55><%:55 Mins%></option>
+			<option value=60><%:60 Mins%></option>
 		</select>
-		<input id="scan_cfg_bt" type="button" class="cbi-button cbi-button-apply" value="<%:APPLY SCAN CONFIG%>" style="display:none" onclick="return query_apply_ScanCfg()" />
+		<input id="scan_cfg_bt" type="button" class="cbi-button cbi-button-apply" value="<%:APPLY SCAN CONFIG%>" style="display:none" onclick="return query_apply_ScanCfg(true)" />
 		<select style="visibility:hidden;width:auto" name="periodic_scan_time" id="connect_criteria">
 			<option value="1" selected="selected"><%:Default%></option>
 			<option value="RSRP"><%:RSRP%></option>
