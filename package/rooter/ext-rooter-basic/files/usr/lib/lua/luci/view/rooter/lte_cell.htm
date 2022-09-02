@@ -68,7 +68,6 @@
 		console.log("Load done");
 		document.getElementById("loading").style.display="block";
 		startScan();
-		setInterval(startScan, 300000);
 	})
 
 	function startScan()
@@ -124,13 +123,13 @@
 
 					let IsConnected = (onlineArr[8] == connectedPCID);
 
-					let onlineStr = onlineArr.map(td => `<td class=${IsConnected && index > 0 ? "high-light" : ""}>` + 
+					let onlineStr = onlineArr.map((td, index) => `<td type=${NameOfColumn(index)} class=${IsConnected && index > 0 ? "high-light" : ""}>` + 
 														`${td}` + 
 														`</td>`).join('\t');
 														
 					if(index > 0)
 					{
-						onlineStr = onlineStr + `<td><button class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this)' >Lock cell</button></td>`
+						onlineStr = onlineStr + `<td><button  id='lckBT-${index}' class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this,false)' >Lock cell</button></td>`
 					}
 					return `<tr id='tr-${index}' >${onlineStr}</tr>`
 				})
@@ -140,6 +139,11 @@
 				// set timeout
 				document.getElementById("loading").style.display="none";
 				document.getElementById("download_csv").style.display = "inline-block";
+				document.getElementById("trigger_scan").style.display = "inline-block";
+				document.getElementById("scanCFG").style.visibility="visible";
+				document.getElementById("connect_criteria").style.visibility="visible";
+				document.getElementById("scan_cfg_bt").style.display = "inline-block";
+				document.getElementById("auto_connect_bt").style.display = "inline-block";
 				setTimeout(GenCSV,500);
 				// Scan done
 				console.log("Stop Scan");	
@@ -148,10 +152,92 @@
 		return false;
 	}
 
-	function lockCell(index,btn) {
+	function NameOfColumn(index)
+	{
+		switch (index)
+		{
+			case 14:
+				return "RSRP";
+			case 15:
+				return "RSRQ";
+			default:
+				return "default";
+		}
+	}
+
+	function startScanOption(btn) {
+		const btnValue = btn.value;
+		if(btnValue == "ON")
+		{
+			console.log("Start automatic scan");
+			query_apply_ScanCfg(false);
+			periodicScanID = setInterval(startScan, cfgTimeMilSec);
+			btn.value = '<%:OFF%>';
+		}
+		else
+		{
+			console.log("Stop automatic scan");
+			clearInterval(periodicScanID);
+			btn.value = '<%:ON%>';
+		}
+	}
+	
+	function query_apply_ScanCfg(showAlert){
+		// calculate configure time
+		cfgTimeMin=document.getElementById("scanCFG").value;
+		if(cfgTimeMin == 0)
+		{
+			cfgTimeMin = 5; // set default periodic scan is 5 minutes
+		}
+
+		cfgTimeMilSec = cfgTimeMin * 60 * 1000; // convert from minute to mili-second 
+		console.log(cfgTimeMilSec);
+
+		// update cfgTime runtime
+		// check if scanning - update configure time and restart
+		if(document.getElementById("trigger_scan").value == "OFF")
+		{
+			clearInterval(periodicScanID);
+			periodicScanID = setInterval(startScan, cfgTimeMilSec);
+		}
+
+		// show alert to use if needed
+		if(showAlert == true)
+		{
+			alert("Change periodic scan time to:  " + cfgTimeMin + " minutes succeed");
+		}
+	}
+	
+	function auto_connect(btn){
+		// Change button state while perform auto connection
+		btn.disabled  = true;
+		btn.value = '<%:CONNECTING...%>';
+		
+		// Filter the best cell
+		const criteria = document.getElementById("connect_criteria").value;
+		var columnData = document.querySelectorAll(`[type=${criteria}]`);
+		var criteriaArrVal = [];
+		for (var i = 1; i < columnData.length; i++) 
+		{
+			if(columnData[i].innerHTML != '-')
+			{
+				criteriaArrVal.push(parseInt(columnData[i].innerHTML));
+			}
+		}
+		console.log(criteriaArrVal);
+		const max = Math.max(...criteriaArrVal);
+		let index = criteriaArrVal.indexOf(max);
+		console.log(`"maxValue:" ${max} "index:" ${index}`); 
+
+		// Perform lock
+		let lockBT = document.getElementById(`lckBT-${index+1}`);
+		lockCell(index+1,lockBT,true);
+	}
+
+	function lockCell(index,btn,isAutoMode) {
 		// Change button state while locking
 		btn.disabled  = true;
-		btn.innerHTML = '<%:Locking...%>';
+		btn.innerHTML = '<%:LOCKING...%>';
 
 		// Parse PCID & EARFCN
 		const id = `tr-${index}`;
@@ -168,6 +254,13 @@
 			{
 				// re-init button
 				btn.innerHTML = '<%:Locked%>';
+
+				// re-init auto connect button
+				if(isAutoMode==true)
+				{
+					document.getElementById("auto_connect_bt").disabled = false;
+					document.getElementById("auto_connect_bt").value = '<%:AUTO CONNECT%>';
+				}
 			}
 		);
 		return false;
@@ -206,7 +299,29 @@
 <h2><a id="content" name="content"><%:Modem Scan Cell Information%></a></h2>
 <div class="cbi-map-descr"> </div>
 <fieldset class="cbi-section" id="cbi-mod">
-	<div align="left"> 
+	<div align="left">
+		<input id="trigger_scan" type="button" class="cbi-button cbi-button-apply" value="<%:ON%>" style="display:none" onclick="return startScanOption(this)" /> 
+		<select style="visibility:hidden;width:auto" name="periodic_scan_time" id="scanCFG">
+			<option value=0 selected="selected"><%:Default%></option>
+			<option value=5><%:5 Mins%></option>
+			<option value=10><%:10 Mins%></option>
+			<option value=15><%:15 Mins%></option>
+			<option value=20><%:20 Mins%></option>
+			<option value=25><%:25 Mins%></option>
+			<option value=30><%:30 Mins%></option>
+			<option value=35><%:35 Mins%></option>
+			<option value=40><%:40 Mins%></option>
+			<option value=45><%:45 Mins%></option>
+			<option value=50><%:50 Mins%></option>
+			<option value=55><%:55 Mins%></option>
+			<option value=60><%:60 Mins%></option>
+		</select>
+		<input id="scan_cfg_bt" type="button" class="cbi-button cbi-button-apply" value="<%:APPLY SCAN CONFIG%>" style="display:none" onclick="return query_apply_ScanCfg(true)" />
+		<select style="visibility:hidden;width:auto" name="periodic_scan_time" id="connect_criteria">
+			<option value="RSRP" selected="selected"><%:Default%></option>
+			<option value="RSRP"><%:RSRP%></option>
+		</select>
+		<input id="auto_connect_bt" type="button" class="cbi-button cbi-button-apply" value="<%:AUTO CONNECT%>" style="display:none" onclick="return auto_connect(this)" />
 		<a id="download_csv" class="cbi-button cbi-button-apply" style="display:none">Download CSV</a>
 	</div>
 	</table>
