@@ -321,6 +321,8 @@ TXL="-"
 TXH="-"
 
 # parse data
+# Parse Operater
+OPERATOR=$(head -n 6 /tmp/status$CURRMODEM.file | tail -1 | cut -d " " -f1)
 while IFS= read -r line
 do
 	case $uVid in
