@@ -124,7 +124,7 @@
 
 					let IsConnected = (onlineArr[8] == connectedPCID);
 
-					let onlineStr = onlineArr.map((td, index) => `<td type=${NameOfColumn(index)} class=${IsConnected && index > 0 ? "high-light" : ""}>` + 
+					let onlineStr = onlineArr.map((td, index) => `<td type=${NameOfColumn(index)} class=${(IsConnected & (index > 0)) ? "high-light" : ""}>` + 
 														`${td}` + 
 														`</td>`).join('\t');
 														
