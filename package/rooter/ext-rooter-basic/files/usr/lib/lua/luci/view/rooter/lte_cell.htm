@@ -73,6 +73,7 @@
 	function startScan()
 	{
 		console.log("Start Scan");
+		isScanning = true;
 		// Start scanning
 		XHR.get('<%=luci.dispatcher.build_url("admin", "modem", "lte_scancell")%>',
 			null,
@@ -146,6 +147,7 @@
 				document.getElementById("auto_connect_bt").style.display = "inline-block";
 				setTimeout(GenCSV,500);
 				// Scan done
+				isScanning = false;
 				console.log("Stop Scan");	
 			}
 		);
@@ -207,12 +209,29 @@
 			alert("Change periodic scan time to:  " + cfgTimeMin + " minutes succeed");
 		}
 	}
-	
+
+	function retry_auto_connect()
+	{
+		// first - stop the auto connect retry timer
+		clearInterval(retryAutoConnectID);
+
+		// perform auto-connect
+		let autoBtn = document.getElementById("auto_connect_bt");
+		auto_connect(autoBtn);
+	}
+
 	function auto_connect(btn){
 		// Change button state while perform auto connection
 		btn.disabled  = true;
 		btn.value = '<%:CONNECTING...%>';
 		
+		// Wait while scan function performing
+		if(isScanning)
+		{
+			retryAutoConnectID = setInterval(retry_auto_connect,30000);	
+			return false;
+		}
+
 		// Filter the best cell
 		const criteria = document.getElementById("connect_criteria").value;
 		var columnData = document.querySelectorAll(`[type=${criteria}]`);
@@ -232,6 +251,9 @@
 		// Perform lock
 		let lockBT = document.getElementById(`lckBT-${index+1}`);
 		lockCell(index+1,lockBT,true);
+		
+		// return true to notify if the lock finish or not
+		return true;
 	}
 
 	function lockCell(index,btn,isAutoMode) {
