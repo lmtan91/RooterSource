@@ -90,7 +90,7 @@ function action_lte_scancell()
 	local rv ={}
 	local file
 	os.execute("/usr/lib/rooter/luci/lte826_scancmd.sh")
-
+	-- Push the Scan data to frontend
 	result = "/tmp/quectelScan"
 	file = io.open(result, "r")
 	if file ~= nil then
@@ -99,6 +99,16 @@ function action_lte_scancell()
 		os.execute("/usr/lib/rooter/luci/luaops.sh delete /tmp/quectelScan")
 	else
 		rv["log"] = "No entries in log file"
+	end
+	-- Push the Lock cell data to frontend
+	result = "/tmp/quectelLock"
+	file = io.open(result, "r")
+	if file ~= nil then
+		rv["lock"] = file:read("*all")
+		file:close()
+		os.execute("/usr/lib/rooter/luci/luaops.sh delete /tmp/quectelLock")
+	else
+		rv["lock"] = "0 0"
 	end
 
 	luci.http.prepare_content("application/json")
