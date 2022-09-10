@@ -126,6 +126,7 @@ case $uVid in
 				M4='AT+QCFG="band",0,'$M3',0'
 				M6='AT+QENG="servingcell"'
 				M7='AT+QCFG="nwscanmode",0'
+				M8='AT+QNWLOCK="common/lte"'
 			;;
 			"030b" ) # EM060
 				M3="420000A7E23B0E38DF"
@@ -294,6 +295,19 @@ echo "$OX" >> /tmp/quectelScanx
 rm -f /tmp/quectelScan
 flg=0
 
+# Query lock cell status
+if [ ! -z "$M8" ]; then
+	OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "run-at.gcom" "$CURRMODEM" "$M8")
+	log "$OX"
+	ERR=$(echo "$OX" | grep "ERROR")
+	if [ ! -z "$ERR" ]; then
+		log "$ERR"
+		ERR=""
+	else
+		echo "$OX" > /tmp/quectelLockx
+	fi
+fi
+
 #data print to UI
 TYPE="-"
 OPERATOR="-"
@@ -320,7 +334,7 @@ SIS="-"
 TXL="-"
 TXH="-"
 
-# parse data
+# parse scan & neighbor data  
 # Parse Operater
 OPERATOR=$(head -n 6 /tmp/status$CURRMODEM.file | tail -1 | cut -d " " -f1)
 while IFS= read -r line
@@ -435,6 +449,30 @@ done < /tmp/quectelScanx
 rm -f /tmp/quectelScanx
 if [ $flg -eq 0 ]; then
 	echo "No Neighbouring cells were found" >> /tmp/quectelScan
+fi
+
+# parse lock cell data
+flag=0
+while IFS= read -r line
+do
+    qm=$(echo $line" " | grep "+QNWLOCK:" | tr -d '"' | tr " " ",")
+    if [ "$qm" ]; then
+        EARFCN_LOCK=$(echo $qm | cut -d, -f4)
+        PCID_LOCK=$(echo $qm | cut -d, -f5)
+        LOCK_STATUS=$(echo $qm | cut -d, -f6)
+        if [ $LOCK_STATUS -eq 0 ]; then
+            echo "$EARFCN_LOCK $PCID_LOCK" > /tmp/quectelLock
+        else
+			echo "0 0" > /tmp/quectelLock
+		fi
+		flag=1
+		break
+    fi
+done < /tmp/quectelLockx
+
+rm -f /tmp/quectelLockx
+if [ $flg -eq 0 ]; then
+	echo "0 0" > /tmp/quectelLock
 fi
 
 case $uVid in
