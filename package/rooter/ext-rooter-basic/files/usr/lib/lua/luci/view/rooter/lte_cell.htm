@@ -81,6 +81,7 @@
 			{
 				const data = rv.log;
 				const dataArr = data.split('\n');
+				const lockDataArr = rv.lock.split(' ');
 				const table = document.getElementById('table-data');
 				const tableHeader = `<tr>
 						<th>TYPE </th>
@@ -111,7 +112,9 @@
 					</tr>`;
 				
 				let connectedPCID;
-
+				const lockedEARFCN=lockDataArr[0];
+				const lockedPCID=lockDataArr[1];
+				
 				const tableBody = dataArr
 				.filter(tr=>tr)
 				.map((tr,index) => {
@@ -121,16 +124,20 @@
 						connectedPCID = onlineArr[8];
 						console.log(connectedPCID);
 					}
-
-					let isHighLight = (onlineArr[8] == connectedPCID) & (index > 0);
-
+					
+					let isHighLight  = (index > 0) && (onlineArr[8] == connectedPCID);
+					let isLockedCell = (parseInt(lockedPCID) != 0) && (onlineArr[8] == connectedPCID);
+					
 					let onlineStr = onlineArr.map((td, index) => `<td type=${NameOfColumn(index)} class=${isHighLight ? "high-light" : ""}>` + 
 														`${td}` + 
 														`</td>`).join('\t');
 														
 					if(index > 0)
 					{
-						onlineStr = onlineStr + `<td><button  id='lckBT-${index}' class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem" onclick='lockCell(${index},this,false)' >Lock cell</button></td>`
+						onlineStr = onlineStr + `<td><button ${isLockedCell ? "disabled" : " "}  id='lckBT-${index}'` +
+                                                `class="cbi-button cbi-button-apply" style="padding: 0.1rem 0.3rem"` + 
+                                                `onclick='lockCell(${index},this,false)' >` + 
+                                                `${isLockedCell ? "Locked" : "Lock cell"}` + `</button></td>`;
 					}
 					return `<tr id='tr-${index}' >${onlineStr}</tr>`
 				})
