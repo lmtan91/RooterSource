@@ -82,7 +82,6 @@
 				const data = rv.log;
 				const dataArr = data.split('\n');
 				const lockDataArr = rv.lock.split(' ');
-				const table = document.getElementById('table-data');
 				const tableHeader = `<tr>
 						<th>TYPE </th>
 						<th>OPERATOR </th>
@@ -142,7 +141,10 @@
 					return `<tr id='tr-${index}' >${onlineStr}</tr>`
 				})
 				.join('\n');
-				table.innerHTML = tableHeader + tableBody;
+				
+				// Update table data
+				document.querySelector("#table-data thead").innerHTML = tableHeader;
+				document.querySelector("#table-data tbody").innerHTML = tableBody;
 				
 				// set timeout
 				document.getElementById("loading").style.display="none";
@@ -290,6 +292,13 @@
 					document.getElementById("auto_connect_bt").disabled = false;
 					document.getElementById("auto_connect_bt").value = '<%:AUTO CONNECT%>';
 				}
+
+				// show loading animation and re-scan 
+				alert("Lock to the cell with PCID: " + PCID + "done\nRe-Scan to see the effect!");
+				$("#table-data tbody tr").remove();
+				document.getElementById("loading").style.display = "block";
+				isScanning = true;
+				setTimeout(startScan, 60000);
 			}
 		);
 		return false;
