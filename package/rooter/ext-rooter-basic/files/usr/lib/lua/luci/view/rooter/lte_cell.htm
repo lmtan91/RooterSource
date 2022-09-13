@@ -232,14 +232,15 @@
 	function auto_connect(btn){
 		// Change button state while perform auto connection
 		btn.disabled  = true;
-		btn.value = '<%:CONNECTING...%>';
 		
 		// Wait while scan function performing
 		if(isScanning)
 		{
+			btn.value = '<%:Wait for Scanning...%>';
 			retryAutoConnectID = setInterval(retry_auto_connect,30000);	
 			return false;
 		}
+		btn.value = '<%:CONNECTING...%>';
 
 		// Filter the best cell
 		const criteria = document.getElementById("connect_criteria").value;
@@ -286,19 +287,19 @@
 				// re-init button
 				btn.innerHTML = '<%:Locked%>';
 
-				// re-init auto connect button
-				if(isAutoMode==true)
-				{
-					document.getElementById("auto_connect_bt").disabled = false;
-					document.getElementById("auto_connect_bt").value = '<%:AUTO CONNECT%>';
-				}
-
 				// show loading animation and re-scan 
 				alert("Lock to the cell with PCID: " + PCID + "done\nRe-Scan to see the effect!");
 				$("#table-data tbody tr").remove();
 				document.getElementById("loading").style.display = "block";
 				isScanning = true;
 				setTimeout(startScan, 60000);
+
+				// re-init auto connect button
+				if(isAutoMode==true)
+				{
+					document.getElementById("auto_connect_bt").disabled = false;
+					document.getElementById("auto_connect_bt").value = '<%:AUTO CONNECT%>';
+				}
 			}
 		);
 		return false;
