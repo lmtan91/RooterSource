@@ -125,7 +125,7 @@
 					}
 					
 					let isHighLight  = (index > 0) && (onlineArr[8] == connectedPCID);
-					let isLockedCell = (parseInt(lockedPCID) != 0) && (onlineArr[8] == connectedPCID);
+					let isLockedCell = (parseInt(lockedPCID) != 0) && (onlineArr[8] == lockedPCID);
 					
 					let onlineStr = onlineArr.map((td, index) => `<td type=${NameOfColumn(index)} class=${isHighLight ? "high-light" : ""}>` + 
 														`${td}` + 
