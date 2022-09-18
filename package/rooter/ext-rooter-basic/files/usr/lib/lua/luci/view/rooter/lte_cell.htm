@@ -120,7 +120,9 @@
 					const onlineArr = tr.split(' ');
 
 					if (index == 0){
+						wcdmaRescan = false;
 						connectedPCID = onlineArr[8];
+						if (onlineArr[3] != "LTE") wcdmaRescan = true;
 						console.log(connectedPCID);
 					}
 					
@@ -156,11 +158,26 @@
 				document.getElementById("auto_connect_bt").style.display = "inline-block";
 				setTimeout(GenCSV,500);
 				// Scan done
+				if(wcdmaRescan) WcdmaRescan();
 				isScanning = false;
 				console.log("Stop Scan");	
 			}
 		);
 		return false;
+	}
+
+	function WcdmaRescan()
+	{
+		if(document.getElementById("trigger_scan").value == "OFF")
+		{
+			// Temporary stop user request automatic scan
+			// Actually not stop, just restart the timer 
+			// Can do this trick since the timeout of user request is too long
+			// it enough for this reScan finish
+			query_apply_ScanCfg(false);
+		}
+		// force rescan after 30s
+		setTimeout(startScan, 30000);
 	}
 
 	function NameOfColumn(index)
