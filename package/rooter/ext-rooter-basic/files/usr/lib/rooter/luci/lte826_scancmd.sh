@@ -341,54 +341,62 @@ while IFS= read -r line
 do
 	case $uVid in
 	"2c7c" )
-		qm=$(echo $line" " | grep "+QENG:" | grep "LTE" | tr -d '"' | tr " " ",")
+		qm=$(echo $line" " | grep "+QENG:" | tr -d '"' | tr " " ",")
 		if [ "$qm" ]; then
 			TYPECELL=$(echo $qm | cut -d, -f2)
+			PROTOCOL=$(echo $qm | cut -d, -f4)
 			if [ "$TYPECELL" = "servingcell" ]; then
 				# serving cell
 				TYPE="MC"
-				# STATE=$(echo $qm | cut -d, -f3)
-				PROTOCOL=$(echo $qm | cut -d, -f4)
-				SCHEME=$(echo $qm | cut -d, -f5)
-				MCC=$(echo $qm | cut -d, -f6)
-				MNC=$(echo $qm | cut -d, -f7)
-				CID=$(echo $qm | cut -d, -f8)
-				PCID=$(echo $qm | cut -d, -f9)
-				EARFCN=$(echo $qm | cut -d, -f10)
-				FREQ_BAND_IND=$(echo $qm | cut -d, -f11)
-				UL_BW=$(echo $qm | cut -d, -f12)
-				DL_BW=$(echo $qm | cut -d, -f13)
-				TAC=$(echo $qm | cut -d, -f14)
-				RSRP=$(echo $qm | cut -d, -f15)
-				RSRQ=$(echo $qm | cut -d, -f16)
-				RSSI=$(echo $qm | cut -d, -f17)
-				SINR=$(echo $qm | cut -d, -f18)
-				SRXLEV=$(echo $qm | cut -d, -f19)
+				if [ "$PROTOCOL" = "LTE" ]; then
+					# STATE=$(echo $qm | cut -d, -f3)
+					SCHEME=$(echo $qm | cut -d, -f5)
+					MCC=$(echo $qm | cut -d, -f6)
+					MNC=$(echo $qm | cut -d, -f7)
+					CID=$(echo $qm | cut -d, -f8)
+					PCID=$(echo $qm | cut -d, -f9)
+					EARFCN=$(echo $qm | cut -d, -f10)
+					FREQ_BAND_IND=$(echo $qm | cut -d, -f11)
+					UL_BW=$(echo $qm | cut -d, -f12)
+					DL_BW=$(echo $qm | cut -d, -f13)
+					TAC=$(echo $qm | cut -d, -f14)
+					RSRP=$(echo $qm | cut -d, -f15)
+					RSRQ=$(echo $qm | cut -d, -f16)
+					RSSI=$(echo $qm | cut -d, -f17)
+					SINR=$(echo $qm | cut -d, -f18)
+					SRXLEV=$(echo $qm | cut -d, -f19)
+				else
+					# WCDMA cell
+					MCC=$(echo $qm | cut -d, -f5)
+					MNC=$(echo $qm | cut -d, -f6)
+					CID=$(echo $qm | cut -d, -f8)
+				fi
 			else 
 				# neighbour cell
-				TYPE=$(echo $qm | cut -d, -f3)
-				PROTOCOL=$(echo $qm | cut -d, -f4)
-				EARFCN=$(echo $qm | cut -d, -f5)
-				PCID=$(echo $qm | cut -d, -f6)
-				RSRQ=$(echo $qm | cut -d, -f7)
-				RSRP=$(echo $qm | cut -d, -f8)
-				RSSI=$(echo $qm | cut -d, -f9)
-				SINR=$(echo $qm | cut -d, -f10)
-				SRXLEV=$(echo $qm | cut -d, -f11)  
-				CELL_RSP=$(echo $qm | cut -d, -f12)
-				# re-init unvalid data
-				FREQ_BAND_IND="-"
-				UL_BW="-"
-				DL_BW="-"
-				TAC="-"
-				# Parse specific data for intra and iner
-				if [ "$TYPE" = "inter" ]; then
-					TXL=$(echo $qm | cut -d, -f13)
-					TXH=$(echo $qm | cut -d, -f14)
-				else
-					SNIS=$(echo $qm | cut -d, -f13)
-					TSL=$(echo $qm | cut -d, -f14)
-					SIS=$(echo $qm | cut -d, -f15)
+				if [ "$PROTOCOL" = "LTE" ]; then
+					TYPE=$(echo $qm | cut -d, -f3)
+					EARFCN=$(echo $qm | cut -d, -f5)
+					PCID=$(echo $qm | cut -d, -f6)
+					RSRQ=$(echo $qm | cut -d, -f7)
+					RSRP=$(echo $qm | cut -d, -f8)
+					RSSI=$(echo $qm | cut -d, -f9)
+					SINR=$(echo $qm | cut -d, -f10)
+					SRXLEV=$(echo $qm | cut -d, -f11)  
+					CELL_RSP=$(echo $qm | cut -d, -f12)
+					# re-init unvalid data
+					FREQ_BAND_IND="-"
+					UL_BW="-"
+					DL_BW="-"
+					TAC="-"
+					# Parse specific data for intra and iner
+					if [ "$TYPE" = "inter" ]; then
+						TXL=$(echo $qm | cut -d, -f13)
+						TXH=$(echo $qm | cut -d, -f14)
+					else
+						SNIS=$(echo $qm | cut -d, -f13)
+						TSL=$(echo $qm | cut -d, -f14)
+						SIS=$(echo $qm | cut -d, -f15)
+					fi
 				fi
 			fi
 			# update data to file
