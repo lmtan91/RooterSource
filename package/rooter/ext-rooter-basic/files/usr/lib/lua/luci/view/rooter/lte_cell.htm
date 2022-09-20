@@ -128,8 +128,8 @@
 					</tr>`;
 				
 				let connectedPCID;
-				const lockedEARFCN=lockDataArr[0];
-				const lockedPCID=lockDataArr[1];
+				const lockedEARFCN=lockDataArr[0].trim();
+				const lockedPCID=lockDataArr[1].trim();
 				
 				const tableBody = dataArr
 				.filter(tr=>tr)
@@ -140,7 +140,7 @@
 						wcdmaRescan = false;
 						connectedPCID = onlineArr[8];
 						if (onlineArr[3] != "LTE") wcdmaRescan = true;
-						console.log(connectedPCID);
+						console.log(`connectedPCID: ${connectedPCID} --- lockedPCID: ${lockedPCID}`);
 					}
 					
 					let isHighLight  = (index > 0) && (onlineArr[8] == connectedPCID);
