@@ -62,6 +62,7 @@
 </style>
 
 <script type="text/javascript" src="<%=resource%>/xhr.js"></script>
+<script type="text/javascript" src="<%=resource%>/ui.js"></script>
 <script type="text/javascript">//<![CDATA[
 	
 	window.addEventListener('load', function () {
@@ -69,6 +70,22 @@
 		document.getElementById("loading").style.display="block";
 		startScan();
 	})
+
+	function showScanningDiag()
+	{
+		L.require('ui').then(function(ui) {
+			ui.showModal(_('Checking lockcell…'), [
+				E('span', { 'class': 'spinning' }, _('Scanning....'))
+			]);
+		});
+	}
+
+	function closeDiag()
+	{
+		L.require('ui').then(function(ui) {
+			ui.hideModal();
+		});
+	}
 
 	function startScan()
 	{
@@ -149,6 +166,7 @@
 				document.querySelector("#table-data tbody").innerHTML = tableBody;
 				
 				// set timeout
+				closeDiag();
 				document.getElementById("loading").style.display="none";
 				document.getElementById("download_csv").style.display = "inline-block";
 				document.getElementById("trigger_scan").style.display = "inline-block";
@@ -305,9 +323,10 @@
 				btn.innerHTML = '<%:Locked%>';
 
 				// show loading animation and re-scan 
-				alert("Lock to the cell with PCID: " + PCID + "done\nRe-Scan to see the effect!");
-				$("#table-data tbody tr").remove();
-				document.getElementById("loading").style.display = "block";
+				// alert("Lock to the cell with PCID: " + PCID + "done\nRe-Scan to see the effect!");
+				// $("#table-data tbody tr").remove();
+				// document.getElementById("loading").style.display = "block";
+				showScanningDiag();
 				isScanning = true;
 				setTimeout(startScan, 60000);
 
