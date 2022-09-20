@@ -339,6 +339,7 @@ TXH="-"
 OPERATOR=$(head -n 6 /tmp/status$CURRMODEM.file | tail -1 | cut -d " " -f1)
 while IFS= read -r line
 do
+	isWr2File=0
 	case $uVid in
 	"2c7c" )
 		qm=$(echo $line" " | grep "+QENG:" | tr -d '"' | tr " " ",")
@@ -371,6 +372,7 @@ do
 					MNC=$(echo $qm | cut -d, -f6)
 					CID=$(echo $qm | cut -d, -f8)
 				fi
+				isWr2File=1
 			else 
 				# neighbour cell
 				if [ "$PROTOCOL" = "LTE" ]; then
@@ -397,10 +399,13 @@ do
 						TSL=$(echo $qm | cut -d, -f14)
 						SIS=$(echo $qm | cut -d, -f15)
 					fi
+					isWr2File=1
 				fi
 			fi
 			# update data to file
-			echo "$TYPE $OPERATOR $COUNTRY $PROTOCOL $SCHEME $MCC $MNC $CID $PCID $EARFCN $FREQ_BAND_IND $UL_BW $DL_BW $TAC $RSRP $RSRQ $RSSI $SINR $SRXLEV $CELL_RSP $SNIS $SIS $TXL $TXH" >> /tmp/quectelScan
+			if [ $isWr2File -eq 1 ]; then
+				echo "$TYPE $OPERATOR $COUNTRY $PROTOCOL $SCHEME $MCC $MNC $CID $PCID $EARFCN $FREQ_BAND_IND $UL_BW $DL_BW $TAC $RSRP $RSRQ $RSSI $SINR $SRXLEV $CELL_RSP $SNIS $SIS $TXL $TXH" >> /tmp/quectelScan
+			fi
 			# update flag
 			flg=1
 		fi
